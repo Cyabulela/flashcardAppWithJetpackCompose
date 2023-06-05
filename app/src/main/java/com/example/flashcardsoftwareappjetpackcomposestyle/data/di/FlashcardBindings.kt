@@ -4,11 +4,13 @@ import com.example.flashcardsoftwareappjetpackcomposestyle.data.repository.Flash
 import com.example.flashcardsoftwareappjetpackcomposestyle.domain.repository.FlashcardRepository
 import com.example.flashcardsoftwareappjetpackcomposestyle.domain.use_case.FlashcardUseCasesFactory
 import dagger.Binds
+import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 
+@Module
 @InstallIn(SingletonComponent::class)
 abstract class FlashcardBindings {
 
@@ -17,11 +19,4 @@ abstract class FlashcardBindings {
     abstract fun bindFlashcardRepository (
         flashcardRepository: FlashcardRepositoryImpl
     ) : FlashcardRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindFlashcardUseCasesFactory(
-        useCasesFactory: FlashcardUseCasesFactory
-    ) : FlashcardUseCasesFactory
-
 }

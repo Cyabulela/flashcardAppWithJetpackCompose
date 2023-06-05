@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class FlashcardDto(
+data class Flashcards(
     val title : String,
     val timeStamp : Long,
     val notes : String = "",

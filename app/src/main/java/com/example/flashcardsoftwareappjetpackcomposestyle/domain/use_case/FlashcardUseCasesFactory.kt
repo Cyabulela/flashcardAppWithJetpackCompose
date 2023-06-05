@@ -12,4 +12,5 @@ class FlashcardUseCasesFactory @Inject constructor(
     val upsectFlashcard  = UpsertFlashcard(repository)
     val deleteFlashcard = DeleteFlashcard(repository)
     val getFlashcards = GetFlashcards(repository)
+    val getFlashcardById = GetFlashcardById(repository)
 }
