@@ -9,20 +9,9 @@ class GetFlashcards (
     private val flashcardRepository: FlashcardRepository
 ) {
     operator fun invoke(query : String) : Flow<List<Flashcard>> {
-        return flashcardRepository.getFlashcards()
+        return flashcardRepository.getFlashcards(query)
             .map { list ->
-                if (query.isNotBlank()) {
-                    list.filter {
-                        it.title.trim().contains(query.trim() , ignoreCase = true) or it.notes.trim().contains(query.trim() , ignoreCase = true)
-                    }.sortedBy {
-                        it.lastUpdateDateTime
-                    }
-                }
-                else {
-                    list.sortedBy {
-                        it.lastUpdateDateTime
-                    }
-                }
+                list.sortedBy { it.lastUpdateDateTime }
             }
     }
 }

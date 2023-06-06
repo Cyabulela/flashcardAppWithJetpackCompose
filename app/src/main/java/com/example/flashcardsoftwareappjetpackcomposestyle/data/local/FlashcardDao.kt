@@ -19,7 +19,14 @@ interface FlashcardDao {
     @Query("SELECT * FROM flashcards WHERE id = :id")
     suspend fun getFlashcardsById(id : Int) : Flashcards?
 
-    @Query("SELECT * FROM flashcards")
-    fun getFlashcards() : Flow<List<Flashcards>>
+    @Query("""
+        SELECT * FROM flashcards
+        WHERE LOWER(title)
+        LIKE '%' || LOWER(:query) || '%'
+        OR
+        LOWER(notes)
+        LIKE '%' || LOWER(:query) || '%'
+    """)
+    fun getFlashcards(query : String = "") : Flow<List<Flashcards>>
 
 }

@@ -30,8 +30,8 @@ class FlashcardRepositoryImpl @Inject constructor(
         return dao.getFlashcardsById(id)?.toFlashcard()
     }
 
-    override fun getFlashcards(): Flow<List<Flashcard>> {
-        return dao.getFlashcards().map { list ->
+    override fun getFlashcards(query : String): Flow<List<Flashcard>> {
+        return dao.getFlashcards(query).map { list ->
             list.map {
                 it.toFlashcard()
             }

@@ -25,19 +25,19 @@ class HomeViewModel @Inject constructor(
     private val useCasesFactory: FlashcardUseCasesFactory
 ) : ViewModel(){
 
-    init {
-        getNotes()
-    }
-    
+
     var state by mutableStateOf(HomeFields())
         private set
-    
+
     private var recentDeletedFlashcard : Flashcard? = null
     private val _uiEvents = Channel<UiEvent>()
     val uiEvent = _uiEvents.receiveAsFlow()
 
     private var job : Job? = null
-    
+
+    init {
+        getNotes()
+    }
     fun onEvent(event: HomeEvents) {
         when(event){
             HomeEvents.AddFlashcard -> {
@@ -48,8 +48,8 @@ class HomeViewModel @Inject constructor(
             is HomeEvents.DeleteFlashcard -> {
                 viewModelScope.launch {
                     useCasesFactory.deleteFlashcard(event.flashcard)
-                    _uiEvents.send(UiEvent.ShowSnackbar(message = "Deleted" , action = "Undo"))
                     recentDeletedFlashcard = event.flashcard
+                    _uiEvents.send(UiEvent.ShowSnackbar(message = "Deleted" , action = "Undo"))
                 }
             }
             is HomeEvents.OnItemClicked -> {
@@ -77,16 +77,19 @@ class HomeViewModel @Inject constructor(
             }
 
             HomeEvents.OnToggleChange -> {
-                state = state.copy(isSearchActive = !state.isSearchActive)
+                state = state.copy(isSearchActive = !state.isSearchActive , searchText = "")
+                job?.cancel()
+                getNotes()
             }
         }
     }
 
     private fun getNotes(query : String = "") {
         viewModelScope.launch {
+            state = state.copy(isLoading = true)
             useCasesFactory.getFlashcards(query)
                 .collect {
-                    state = state.copy(flashcards = it)
+                    state = state.copy(flashcards = it , isLoading = false)
                 }
         }
     }
@@ -95,7 +98,7 @@ class HomeViewModel @Inject constructor(
         val flashcards : List<Flashcard> = emptyList(),
         val searchText : String = "",
         val isSearchActive : Boolean = false,
-        val isLoading : Boolean = true
+        val isLoading : Boolean = false
     )
 
 }

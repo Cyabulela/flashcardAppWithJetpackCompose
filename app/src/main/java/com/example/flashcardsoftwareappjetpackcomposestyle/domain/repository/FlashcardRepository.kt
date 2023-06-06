@@ -12,5 +12,5 @@ interface FlashcardRepository {
 
     suspend fun getFlashcardById(id : Int) : Flashcard?
 
-    fun getFlashcards() : Flow<List<Flashcard>>
+    fun getFlashcards(query : String) : Flow<List<Flashcard>>
 }
